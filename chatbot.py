@@ -1,13 +1,3 @@
-import os
-
-# --- Paddle / PaddleX hard suppression ---
-os.environ["DISABLE_MODEL_SOURCE_CHECK"] = "True"
-os.environ["PADDLE_LOG_LEVEL"] = "ERROR"
-os.environ["FLAGS_minloglevel"] = "3"
-os.environ["GLOG_minloglevel"] = "3"
-os.environ["PYTHONWARNINGS"] = "ignore"
-
-
 from rag_index import RAGIndex
 from generator import generate_answer
 from config import SIM_THRESHOLD
@@ -16,6 +6,11 @@ from query_rewriter import rewrite_query
 def main():
     rag = RAGIndex()
     print("🤖 Agentic RAG Chatbot")
+    print("Commands:")
+    print(":exit - Exit the chatbot")
+    print(":add <file_path> - Add a new document (PDF, DOCX, or image)")
+    print(":save - Save the current state to the database\n")
+    print("- " * 30)
 
     while True:
         q = input("You: ").strip()
@@ -28,7 +23,7 @@ def main():
                 _, path = q.split(" ", 1)
                 rag.add_pdf(path)
             except Exception as e:
-                print(f"⚠️ Failed to add PDF: {e}")
+                print(f"⚠️ Failed to add Document: {e}")
             continue
 
         elif q == ":save":
@@ -38,14 +33,15 @@ def main():
         else :
             q = rewrite_query(q)
             results = rag.retrieve(q)
-            if not results or results[0][2] < SIM_THRESHOLD:
+            print(f"Retrieved {len(results)} results. Top score: {results[0][3] if results else 'N/A'}")
+            if not results or results[0][3] < SIM_THRESHOLD:
                 print("Bot: I don't know.")
                 continue
 
         contexts = []
         sources = []
 
-        for content, source, page, score in results:
+        for content, source, page, score, *_ in results:
             contexts.append(content)
             sources.append((source, page))
 
@@ -53,7 +49,7 @@ def main():
 
         print("Bot:", answer)
         print("\nSources:")
-        for s, p in sources:
+        for s, p in set(sources):
             print(f"{s} - Page {p}")
         print("- " * 30)
         

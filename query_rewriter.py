@@ -40,6 +40,7 @@ Rewritten query:
         return query
 
 if __name__ == "__main__":
-    query=input("Enter your query: ")
-    rewritten_query = rewrite_query(query)
-    print("Rewritten query:", rewritten_query)
+    while True:        
+        query=input("Enter your query: ")
+        rewritten_query = rewrite_query(query)
+        print("Rewritten query:", rewritten_query)

@@ -13,7 +13,7 @@ FAISS_TOP_K = 4
 SENT_SIM_THRESHOLD = 0.7
 
 DB_CONFIG = {
-    "dbname": "AgenticRAGDBPages",
+    "dbname": "RAGDBPageshybridwatson",
     "user": "postgres",
     "password": "Gmail.com#1",#os.environ.get("Postgres_Password"),
     "host": "localhost",
