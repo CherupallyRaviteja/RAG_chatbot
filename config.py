@@ -15,7 +15,7 @@ SENT_SIM_THRESHOLD = 0.7
 DB_CONFIG = {
     "dbname": "RAGDBPageshybridwatson",
     "user": "postgres",
-    "password": "Gmail.com#1",#os.environ.get("Postgres_Password"),
+    "password":os.environ.get("Postgres_Password"),#"Gmail.com#1",
     "host": "localhost",
     "port": "5432"
 }
